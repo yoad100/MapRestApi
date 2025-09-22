@@ -2,19 +2,6 @@
 
 A backend RESTful API for managing map objects and polygons using **ASP.NET Core** and **MongoDB**.
 
----
-
-## 📋 Table of Contents
-
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Configuration](#configuration)
-- [API Endpoints](#api-endpoints)
-- [Project Structure](#project-structure)
-
----
-
 ## ✨ Features
 
 - CRUD operations for **Map Objects** and **Polygons**
