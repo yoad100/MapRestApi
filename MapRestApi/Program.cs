@@ -1,4 +1,6 @@
-using MapRestApi.Services;
+using MapRestApi.Repositories;
+using MapRestApi.Repositories.Interfaces;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add CORS
@@ -17,8 +19,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Register MongoDB service
-builder.Services.AddSingleton<IMongoService, MongoService>();
+// --- MongoDB singleton ---
+builder.Services.AddSingleton<IMongoDatabase>(sp =>
+{
+    var mongoUri = Environment.GetEnvironmentVariable("MONGODB_URI")
+                   ?? "mongodb://localhost:27017";
+    var client = new MongoClient(mongoUri);
+    return client.GetDatabase("MapDb");
+});
+
+// Register MongoDB repositories
+builder.Services.AddScoped<IPolygonRepository, PolygonRepository>();
+builder.Services.AddScoped<IObjectRepository, ObjectRepository>();
 
 var app = builder.Build();
 

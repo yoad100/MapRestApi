@@ -1,5 +1,7 @@
 using MapRestApi.Models;
-using MapRestApi.Services;
+using MapRestApi.Models.Common;
+using MapRestApi.Repositories;
+using MapRestApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,11 +12,11 @@ namespace MapRestApi.Controllers
     [Route("api/polygons")]
     public class PolygonController : ControllerBase
     {
-        private readonly IMongoService _mongoService;
+        private readonly IPolygonRepository _polygonRepo;
 
-        public PolygonController(IMongoService mongoService)
+        public PolygonController(IPolygonRepository polygonRepo)
         {
-            _mongoService = mongoService;
+            _polygonRepo = polygonRepo;
         }
 
         /// <summary>
@@ -25,7 +27,7 @@ namespace MapRestApi.Controllers
         {
             try
             {
-                var polygons = await _mongoService.GetPolygonsAsync();
+                var polygons = await _polygonRepo.GetPolygonsAsync();
                 return Ok(polygons);
             }
             catch (Exception ex)
@@ -45,11 +47,11 @@ namespace MapRestApi.Controllers
 
             try
             {
-                var deleted = await _mongoService.DeletePolygonAsync(id);
+                var deleted = await _polygonRepo.DeletePolygonAsync(id);
                 if (!deleted)
                     return NotFound($"Polygon with id '{id}' not found.");
 
-                var polygons = await _mongoService.GetPolygonsAsync();
+                var polygons = await _polygonRepo.GetPolygonsAsync();
                 return Ok(polygons);
             }
             catch (Exception ex)
@@ -66,8 +68,8 @@ namespace MapRestApi.Controllers
         {
             try
             {
-                await _mongoService.DeleteAllPolygonsAsync();
-                var polygons = await _mongoService.GetPolygonsAsync();
+                await _polygonRepo.DeleteAllPolygonsAsync();
+                var polygons = await _polygonRepo.GetPolygonsAsync();
                 return Ok(polygons);
             }
             catch (Exception ex)
@@ -80,15 +82,30 @@ namespace MapRestApi.Controllers
         /// Save multiple polygons at once.
         /// </summary>
         [HttpPost("save")]
-        public async Task<ActionResult<List<Polygon>>> Save([FromBody] List<PolygonObjectDTO> polygons)
+        public async Task<ActionResult<List<Polygon>>> Save([FromBody] List<PolygonObjectDTO> polygonsDto)
         {
-            if (polygons == null || polygons.Count == 0)
+            if (polygonsDto == null || polygonsDto.Count == 0)
                 return BadRequest("Polygon list is required.");
 
             try
             {
-                await _mongoService.AddPolygonsBulkAsync(polygons); 
-                var allPolygons = await _mongoService.GetPolygonsAsync();
+                var polygons = polygonsDto.Select(dto => new Polygon
+                {
+                    Id = null, // let Mongo generate it
+                    Type = "Feature",
+                    Geometry = new PolygonGeometry
+                    {
+                        Type = "Polygon",
+                        Coordinates = dto.Geometry.Coordinates
+                    },
+                    Properties = new PolygonProperties
+                    {
+                        Name = dto.Properties.Name,
+                    }
+                }).ToList();
+
+                await _polygonRepo.AddPolygonsBulkAsync(polygons); 
+                var allPolygons = await _polygonRepo.GetPolygonsAsync();
                 return Ok(allPolygons);
             }
             catch (Exception ex)

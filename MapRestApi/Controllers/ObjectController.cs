@@ -1,5 +1,6 @@
 using MapRestApi.Models;
-using MapRestApi.Services;
+using MapRestApi.Models.Common;
+using MapRestApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MapRestApi.Controllers
@@ -8,11 +9,11 @@ namespace MapRestApi.Controllers
     [Route("api/objects")]
     public class ObjectController : ControllerBase
     {
-        private readonly IMongoService _mongoService;
+        private readonly IObjectRepository _objectRepo;
 
-        public ObjectController(IMongoService mongoService)
+        public ObjectController(IObjectRepository objectRepo)
         {
-            _mongoService = mongoService;
+            _objectRepo = objectRepo;
         }
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace MapRestApi.Controllers
         {
             try
             {
-                var objects = await _mongoService.GetObjectsAsync();
+                var objects = await _objectRepo.GetAllObjectsAsync();
                 return Ok(objects);
             }
             catch (System.Exception ex)
@@ -43,11 +44,11 @@ namespace MapRestApi.Controllers
 
             try
             {
-                var deleted = await _mongoService.DeleteObjectAsync(id);
+                var deleted = await _objectRepo.DeleteObjectAsync(id);
                 if (!deleted)
                     return NotFound($"Object with id '{id}' not found.");
 
-                var objects = await _mongoService.GetObjectsAsync();
+                var objects = await _objectRepo.GetAllObjectsAsync();
                 return Ok(objects);
             }
             catch (System.Exception ex)
@@ -60,15 +61,30 @@ namespace MapRestApi.Controllers
         /// Save multiple objects at once.
         /// </summary>
         [HttpPost("save")]
-        public async Task<ActionResult<List<MapObject>>> Save([FromBody] List<MapObjectDTO> objects)
+        public async Task<ActionResult<List<MapObject>>> Save([FromBody] List<MapObjectDTO> objects_dto)
         {
-            if (objects == null || objects.Count == 0)
+            if (objects_dto == null || objects_dto.Count == 0)
                 return BadRequest("Object list is required.");
 
             try
             {
-                await _mongoService.AddObjectsBulkAsync(objects); 
-                var allObjects = await _mongoService.GetObjectsAsync();
+                var objects = objects_dto.Select(dto => new MapObject
+                {
+                    Id = null, // Mongo generates
+                    Type = "Feature",
+                    Geometry = new ObjectGeometry
+                    {
+                        Type = "Point",
+                        Coordinates = new double[] { dto.Geometry.Coordinates[0], dto.Geometry.Coordinates[1] }
+                    },
+                    Properties = new ObjectProperties
+                    {
+                        Name = dto.Properties.Name,
+                        Symbol = dto.Properties.Symbol
+                    }
+                }).ToList();
+                await _objectRepo.AddObjectsBulkAsync(objects);
+                var allObjects = await _objectRepo.GetAllObjectsAsync();
                 return Ok(allObjects);
             }
             catch (System.Exception ex)
