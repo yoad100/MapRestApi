@@ -40,7 +40,7 @@ A backend RESTful API for managing map objects and polygons using **ASP.NET Core
 
 2. **Set environment variables** (or update `launchSettings.json`):
    ```bash
-   export MONGODB_URI=mongodb://localhost:27017
+   MONGODB_URI=mongodb://localhost:27017/example inside .env.local
    ```
 
 3. **Restore dependencies:**
