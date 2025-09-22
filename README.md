@@ -111,7 +111,6 @@ MapRestApi/
 ├── Repositories/         # MongoDB repository classes
 │   ├── Interfaces/
 │   └── Implementations/
-├── Services/             # Optional business logic / MongoService
 ├── Program.cs            # App configuration and DI
 ├── appsettings.json
 └── launchSettings.json
