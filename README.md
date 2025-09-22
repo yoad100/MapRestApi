@@ -4,7 +4,7 @@ A backend RESTful API for managing map objects and polygons using **ASP.NET Core
 
 ---
 
-## Table of Contents
+## 📋 Table of Contents
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
@@ -12,11 +12,10 @@ A backend RESTful API for managing map objects and polygons using **ASP.NET Core
 - [Configuration](#configuration)
 - [API Endpoints](#api-endpoints)
 - [Project Structure](#project-structure)
-- [License](#license)
 
 ---
 
-## Features
+## ✨ Features
 
 - CRUD operations for **Map Objects** and **Polygons**
 - Bulk insert for objects and polygons
@@ -26,7 +25,7 @@ A backend RESTful API for managing map objects and polygons using **ASP.NET Core
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Backend:** ASP.NET Core 7
 - **Database:** MongoDB
@@ -36,7 +35,7 @@ A backend RESTful API for managing map objects and polygons using **ASP.NET Core
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -46,63 +45,77 @@ A backend RESTful API for managing map objects and polygons using **ASP.NET Core
 
 ### Run Locally
 
-1. Clone the repository:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/MapRestApi.git
+   cd MapRestApi
+   ```
 
-```bash
-git clone https://github.com/yourusername/MapRestApi.git
-cd MapRestApi
-Set environment variables (or update launchSettings.json):
+2. **Set environment variables** (or update `launchSettings.json`):
+   ```bash
+   export MONGODB_URI=mongodb://localhost:27017
+   ```
 
-bash
-Copy code
-MONGODB_URI=mongodb://localhost:27017
-Restore dependencies:
+3. **Restore dependencies:**
+   ```bash
+   dotnet restore
+   ```
 
-bash
-Copy code
-dotnet restore
-Run the project:
+4. **Run the project:**
+   ```bash
+   dotnet run
+   ```
 
-bash
-Copy code
-dotnet run
-The API will be available at: https://localhost:7115
+5. **Access the API:** The API will be available at `https://localhost:7115`
 
-Configuration
-MongoDB Connection: Set via environment variable MONGODB_URI.
+---
 
-Database Name: MapDb
+## ⚙️ Configuration
 
-Collections: Objects, Polygons
+- **MongoDB Connection:** Set via environment variable `MONGODB_URI`
+- **Database Name:** `MapDb`
+- **Collections:** `Objects`, `Polygons`
+- **CORS:** Configured for `http://localhost:3000` (React frontend)
 
-CORS: Configured for http://localhost:3000 (React frontend)
+---
 
-API Endpoints
-Objects
-Method	Endpoint	Description
-GET	/api/objects	Get all objects
-POST	/api/objects/save	Save multiple objects in bulk
-DELETE	/api/objects/{id}	Delete object by ID
+## 📚 API Endpoints
 
-Polygons
-Method	Endpoint	Description
-GET	/api/polygons	Get all polygons
-POST	/api/polygons/save	Save multiple polygons in bulk
-DELETE	/api/polygons/{id}	Delete polygon by ID
-DELETE	/api/polygons	Delete all polygons
+### Objects
 
-Project Structure
-graphql
-Copy code
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/objects` | Get all objects |
+| `POST` | `/api/objects/save` | Save multiple objects in bulk |
+| `DELETE` | `/api/objects/{id}` | Delete object by ID |
+
+### Polygons
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/polygons` | Get all polygons |
+| `POST` | `/api/polygons/save` | Save multiple polygons in bulk |
+| `DELETE` | `/api/polygons/{id}` | Delete polygon by ID |
+| `DELETE` | `/api/polygons` | Delete all polygons |
+
+---
+
+## 📁 Project Structure
+
+```
 MapRestApi/
-├─ Controllers/        # API controllers
-│  ├─ ObjectController.cs
-│  └─ PolygonController.cs
-├─ Models/             # DTOs and database models
-├─ Repositories/       # MongoDB repository classes
-│  ├─ Interfaces/
-│  └─ Implementations
-├─ Services/           # Optional business logic / MongoService
-├─ Program.cs          # App configuration and DI
-├─ appsettings.json
-└─ launchSettings.json
+├── Controllers/           # API controllers
+│   ├── ObjectController.cs
+│   └── PolygonController.cs
+├── Models/               # DTOs and database models
+├── Repositories/         # MongoDB repository classes
+│   ├── Interfaces/
+│   └── Implementations/
+├── Services/             # Optional business logic / MongoService
+├── Program.cs            # App configuration and DI
+├── appsettings.json
+└── launchSettings.json
+```
+
+---
+
