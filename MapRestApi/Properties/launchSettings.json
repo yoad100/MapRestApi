@@ -9,7 +9,6 @@
       "applicationUrl": "https://localhost:7115",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MONGODB_URI": "mongodb+srv://yoadGadot:5322453@cluster0.u9cpp9u.mongodb.net/MapDb?retryWrites=true&w=majority&appName=Cluster0"
       }
     }
   }

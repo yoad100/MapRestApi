@@ -22,6 +22,7 @@ builder.Services.AddSwaggerGen();
 // --- MongoDB singleton ---
 builder.Services.AddSingleton<IMongoDatabase>(sp =>
 {
+    DotNetEnv.Env.Load(".env.local");
     var mongoUri = Environment.GetEnvironmentVariable("MONGODB_URI")
                    ?? "mongodb://localhost:27017";
     var client = new MongoClient(mongoUri);
