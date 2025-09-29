@@ -1,4 +1,5 @@
 using MapRestApi.Models.Common;
+using MapRestApi.Models.Geometry;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 

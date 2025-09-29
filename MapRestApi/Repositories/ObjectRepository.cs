@@ -1,5 +1,4 @@
 ﻿using MapRestApi.Models;
-using MapRestApi.Models.Common;
 using MapRestApi.Repositories.Interfaces;
 using MongoDB.Driver;
 

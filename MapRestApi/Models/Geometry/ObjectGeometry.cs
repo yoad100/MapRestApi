@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver.GeoJsonObjectModel;
 
-namespace MapRestApi.Models.Common
+namespace MapRestApi.Models.Geometry
 {
     public class ObjectGeometry
     {
@@ -8,6 +9,6 @@ namespace MapRestApi.Models.Common
         public string Type { get; set; } = "Point";
 
         [BsonElement("coordinates")]
-        public required double[] Coordinates { get; set; } // [lat, lon]
+        public required GeoJson2DCoordinates Coordinates { get; set; }
     }
 }

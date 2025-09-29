@@ -2,7 +2,7 @@
 
 namespace MapRestApi.Models.Common
 {
-    public class PolygonGeometry
+    public class PolygonGeometryDTO
     {
         [BsonElement("type")]
         public string Type { get; set; } = "Polygon";

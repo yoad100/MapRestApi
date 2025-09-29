@@ -1,7 +1,10 @@
 using MapRestApi.Models;
 using MapRestApi.Models.Common;
+using MapRestApi.Models.DTO;
+using MapRestApi.Models.Geometry;
 using MapRestApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace MapRestApi.Controllers
 {
@@ -75,7 +78,7 @@ namespace MapRestApi.Controllers
                     Geometry = new ObjectGeometry
                     {
                         Type = "Point",
-                        Coordinates = new double[] { dto.Geometry.Coordinates[0], dto.Geometry.Coordinates[1] }
+                        Coordinates = new GeoJson2DCoordinates(dto.Geometry.Coordinates[0], dto.Geometry.Coordinates[1])
                     },
                     Properties = new ObjectProperties
                     {

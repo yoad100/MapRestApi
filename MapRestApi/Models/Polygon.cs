@@ -1,6 +1,7 @@
 using MapRestApi.Models.Common;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver.GeoJsonObjectModel;
 using System.Collections.Generic;
 
 namespace MapRestApi.Models
@@ -18,7 +19,7 @@ namespace MapRestApi.Models
         public string Type { get; set; } = "Feature";
 
         [BsonElement("geometry")]
-        public required PolygonGeometry Geometry { get; set; }
+        public required GeoJsonPolygon<GeoJson2DCoordinates> Geometry { get; set; }
 
         [BsonElement("properties")]
         public required PolygonProperties Properties { get; set; }

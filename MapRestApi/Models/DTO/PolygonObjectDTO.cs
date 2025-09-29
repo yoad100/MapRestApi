@@ -1,17 +1,17 @@
 ﻿using MapRestApi.Models.Common;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace MapRestApi.Models
+namespace MapRestApi.Models.DTO
 {
-    public class MapObjectDTO
+    public class PolygonObjectDTO
     {
         [BsonElement("type")]
         public string Type { get; set; } = "Feature";
 
         [BsonElement("geometry")]
-        public required ObjectGeometry Geometry { get; set; }
+        public required PolygonGeometryDTO Geometry { get; set; }
 
         [BsonElement("properties")]
-        public required ObjectProperties Properties { get; set; }
+        public required PolygonProperties Properties { get; set; }
     }
 }

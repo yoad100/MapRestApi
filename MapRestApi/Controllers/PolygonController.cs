@@ -1,9 +1,12 @@
 using MapRestApi.Models;
 using MapRestApi.Models.Common;
+using MapRestApi.Models.DTO;
 using MapRestApi.Repositories;
 using MapRestApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.GeoJsonObjectModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MapRestApi.Controllers
@@ -93,11 +96,20 @@ namespace MapRestApi.Controllers
                 {
                     Id = null, // let Mongo generate it
                     Type = "Feature",
-                    Geometry = new PolygonGeometry
-                    {
-                        Type = "Polygon",
-                        Coordinates = dto.Geometry.Coordinates
-                    },
+                    Geometry = new GeoJsonPolygon<GeoJson2DCoordinates>(
+                        new GeoJsonPolygonCoordinates<GeoJson2DCoordinates>(
+                            // Exterior ring (first ring)
+                            new GeoJsonLinearRingCoordinates<GeoJson2DCoordinates>(
+                                dto.Geometry.Coordinates[0].Select(coord => new GeoJson2DCoordinates(coord[0], coord[1]))
+                            ),
+                            // Interior rings/holes (remaining rings, if any)
+                            dto.Geometry.Coordinates.Skip(1).Select(
+                                ring => new GeoJsonLinearRingCoordinates<GeoJson2DCoordinates>(
+                                    ring.Select(coord => new GeoJson2DCoordinates(coord[0], coord[1]))
+                                )
+                            ).ToArray()
+                        )
+                    ),
                     Properties = new PolygonProperties
                     {
                         Name = dto.Properties.Name,
